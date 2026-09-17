@@ -1,0 +1,53 @@
+# .NET
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# Node / React / Vite
+node_modules/
+dist/
+.vite/
+
+# Environment / local configuration
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Test / coverage output
+TestResults/
+coverage/
+coverage.*
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
