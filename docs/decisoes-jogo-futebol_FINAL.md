@@ -13,6 +13,10 @@
 
 **Última consolidação:** Fase B1, após encerramento da revisão arquitetural da Fase A.
 
+**Emenda posterior:** 17/09/2026 — seção 25 acrescentada (plataforma de execução, nomes
+oficiais e formato da solution). Ela vence sobre qualquer menção anterior a .NET 8,
+`UUIDNext`, `manager-football` ou `ManagerFootball.sln` neste e nos demais documentos.
+
 ---
 
 # PARTE I — DECISÕES VIGENTES APÓS A FASE A
@@ -772,6 +776,83 @@ Manter apenas como bandeiras:
 - motor mais detalhado;
 - calibração séria;
 - cloud/deploy.
+
+---
+
+## 25. Plataforma de execução, nomes e formato da solution ✅ VIGENTE
+
+**Data:** 17/09/2026. **Substitui:** a decisão de .NET 8 registrada no handoff §6 e no
+Mapa Mestre §4, e os nomes `manager-football` / `ManagerFootball.sln`.
+
+### 25.1 Contexto
+
+A implementação da Parte A começou entre 09/09 e 11/09/2026 e produziu um estado que
+divergia da documentação em três pontos: os projetos nasceram em `net10.0`, o `global.json`
+foi fixado em `10.0.401`, e a solution nasceu como `Cartola90.slnx`.
+
+Pela regra de precedência do projeto, divergência entre documento e código se resolve
+corrigindo o derivado — nunca por inércia do que já existe. As três divergências foram
+portanto reabertas como decisão explícita, e não homologadas por comodidade.
+
+### 25.2 Decisão — .NET 10
+
+O projeto adota **.NET 10**.
+
+Razões, na ordem em que pesaram:
+
+1. **Último momento responsável.** A decisão precisava ser tomada antes de A7, quando a
+   versão do EF Core passa a estar escrita em pacotes e migrations. Depois disso, o custo
+   sai de "editar cinco linhas" para "refazer infraestrutura".
+2. **Elimina uma dependência que só existia por causa da versão.** O `UUIDNext` estava no
+   desenho unicamente porque o .NET 8 não gera UUIDv7. O `Guid.CreateVersion7()` é nativo a
+   partir do .NET 9. Manter o .NET 8 significaria adicionar biblioteca de terceiros para
+   gerar identificador — contra o princípio "problema antes de ferramenta".
+3. **Janela de suporte.** O suporte do .NET 8 termina em novembro de 2026, dentro da vida
+   prevista deste projeto; o .NET 10 é LTS até novembro de 2028.
+
+**Divergência registrada.** A decisão original pelo .NET 8 foi tomada conscientemente,
+com o fim do suporte já conhecido, e tinha uma razão legítima: treinar na geração que
+muitas empresas de fato operam. Esse argumento não foi invalidado — foi considerado menos
+determinante para *este sistema* do que o acúmulo de dívida técnica. Fica registrado para
+que a troca não pareça, no futuro, um esquecimento.
+
+**Consequências imediatas:**
+
+- `UUIDNext` **não entra** no projeto;
+- EF Core passa a ser a linha 10;
+- o `.slnx` torna-se viável (ver 25.4).
+
+### 25.3 Decisão — nomes oficiais
+
+```text
+repositório .... Cartola90
+solution ....... Cartola90.slnx
+```
+
+Substituem `manager-football` e `ManagerFootball.sln`. Escolha do autor, mantida por
+preferência pessoal declarada. Não é decisão arquitetural e não altera nenhuma fronteira.
+
+**Pendência derivada:** o `README.md` versionado ainda se intitula "Manager Football" e
+precisa ser alinhado.
+
+### 25.4 Decisão — formato `.slnx`
+
+O projeto adota o formato **`.slnx`**.
+
+A exigência anterior de `.sln` tinha causa técnica concreta, não estética: **o SDK do
+.NET 8 não abre arquivos `.slnx`**. Com .NET 10, a restrição desapareceu.
+
+Ganho real: a `.sln` clássica guarda GUIDs por projeto e blocos de aninhamento que
+produzem conflitos de merge difíceis de resolver. O `.slnx` é XML legível.
+
+**Requisito derivado para A12:** o runner do GitHub Actions precisará de SDK 10, senão
+`dotnet build` não reconhece o arquivo.
+
+### 25.5 O que esta seção NÃO decide
+
+Nada sobre arquitetura, fronteiras, domínio, matemática do motor ou mensageria. As seções
+1 a 24 permanecem integralmente vigentes. Esta seção trata apenas da plataforma de
+execução e de nomes de arquivos.
 
 ---
 

@@ -5,6 +5,31 @@
 
 ---
 
+> # ⚠️ DOCUMENTO HISTÓRICO — NÃO É FONTE DE DECISÃO
+>
+> **Marcado como histórico em 17/09/2026.**
+>
+> A seção 9 do Manual de Implementação já registrava que este arquivo é um artefato de
+> transição entre conversas e não pertence à estrutura documental permanente. Seu conteúdo
+> relevante foi absorvido pelo `manual-implementacao.md`.
+>
+> Ele permanece no repositório como registro do momento em que a fase documental foi
+> encerrada, mas **não deve mais ser consultado para decidir nada**.
+>
+> Pontos deste documento que estão desatualizados:
+>
+> - a seção 6 diz **.NET 8** e prevê a biblioteca `UUIDNext`. O projeto é **.NET 10** e usa
+>   `Guid.CreateVersion7()` nativo;
+> - a seção 7 usa os nomes `manager-football` e `ManagerFootball.sln`. Os nomes oficiais
+>   são **`Cartola90`** e **`Cartola90.slnx`**;
+> - a seção 9 aponta o início em A1. **A1, A2, A3 e A5 já foram executados**; o bloco atual
+>   é **A4**.
+>
+> Fontes válidas: os cinco documentos oficiais, o `mapa-mestre-implementacao.md` e o
+> `manual-implementacao.md`.
+
+---
+
 # 1. Onde o projeto está
 
 A fase documental de produto/arquitetura está fechada e o **Mapa Mestre de Implementação** também foi consolidado.

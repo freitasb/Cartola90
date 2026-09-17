@@ -8,18 +8,39 @@
 
 ```text
 Documentação oficial ........ ✅ Fechada
-Mapa Mestre .................. ✅ Fechado em 07/09/2026
-Manual de Implementação ...... ⬜ Ainda não iniciado
-Implementação oficial ........ ⬜ Ainda não iniciada
+Mapa Mestre .................. ✅ Fechado em 07/09/2026 (emendado em 17/09/2026)
+Manual de Implementação ...... 🔄 Em construção
+Implementação oficial ........ 🔄 Em andamento — Parte A
+
+Parte A:
+A1 ✅   A2 ✅   A3 ✅   A5 ✅ (antecipado)
 
 Bloco atual:
-Mapa Mestre fechado
+A4 — Configurar referências entre projetos
 
 Próximo:
-Manual de Implementação — preparação do repositório
+A6 — Preparar PostgreSQL local
 ```
 
 > O código experimental criado antes deste mapa permanece suspenso e não define a baseline oficial.
+
+---
+
+## Emenda de 17/09/2026
+
+Três decisões foram tomadas e este Mapa foi corrigido para refletí-las. O registro com
+justificativa está em `decisoes-jogo-futebol_FINAL.md` §25.
+
+1. **Plataforma: .NET 10**, substituindo .NET 8. Consequência direta: a biblioteca
+   `UUIDNext` sai do projeto, porque o `Guid.CreateVersion7()` passa a ser nativo.
+2. **Nomes oficiais: `Cartola90` e `Cartola90.slnx`**, substituindo `manager-football`
+   e `ManagerFootball.sln`.
+3. **Formato da solution: `.slnx`.** O `.sln` era exigido porque o SDK do .NET 8 não lê
+   `.slnx`; com .NET 10 essa restrição desapareceu.
+
+Também foi reconhecido que os blocos A1, A2, A3 e A5 já haviam sido executados entre
+09/09 e 11/09/2026, fora da ordem prevista — A5 antes de A3, com justificativa legítima
+registrada no Manual. O marcador acima foi corrigido para descrever o estado real.
 
 ---
 
@@ -132,7 +153,7 @@ Ainda não existe `Club`, `Player`, `Manager` ou qualquer feature do domínio.
 ### Backend
 
 - C#;
-- .NET 8;
+- .NET 10;
 - ASP.NET Core Web API;
 - Controllers;
 - Clean Architecture;
@@ -144,11 +165,15 @@ Ainda não existe `Club`, `Player`, `Manager` ou qualquer feature do domínio.
 ### Persistência
 
 - PostgreSQL;
-- EF Core 8;
+- EF Core 10;
 - Npgsql;
 - migrations;
 - IDs representados como `Guid`;
-- geração UUIDv7 via biblioteca `UUIDNext` enquanto o projeto estiver no .NET 8.
+- geração UUIDv7 nativa via `Guid.CreateVersion7()`.
+
+> **Emenda 17/09/2026.** A versão anterior previa a biblioteca `UUIDNext` porque o .NET 8
+> não gera UUIDv7 sozinho. Com .NET 10 o recurso é nativo, e a dependência foi removida
+> antes de existir: o projeto não deve adicioná-la.
 
 ### Frontend
 
@@ -176,9 +201,9 @@ No recorte inicial, apenas uma Match ficará viva simultaneamente. Isso é limit
 ## 5. Estrutura física do repositório
 
 ```text
-manager-football/
+Cartola90/
 │
-├── ManagerFootball.sln
+├── Cartola90.slnx
 ├── README.md
 ├── global.json
 ├── docker-compose.yml
@@ -240,7 +265,7 @@ Game.Infrastructure → Api
 Ferramentas esperadas na máquina do desenvolvedor:
 
 - Git;
-- SDK .NET 8;
+- SDK .NET 10;
 - Node 24 LTS;
 - pnpm;
 - Docker;
@@ -261,7 +286,7 @@ API e Web ficam fora do container para preservar debug, hot reload e ciclo de ap
 
 ## 8. Sequência de montagem da oficina
 
-### A1 — Criar e preparar o repositório
+### A1 — Criar e preparar o repositório ✅
 
 **Faz nascer:** repositório Git, branch principal, README e documentação versionada.
 
@@ -269,15 +294,15 @@ API e Web ficam fora do container para preservar debug, hot reload e ciclo de ap
 
 ---
 
-### A2 — Criar a solution
+### A2 — Criar a solution ✅
 
-**Faz nascer:** `ManagerFootball.sln`.
+**Faz nascer:** `Cartola90.slnx`.
 
 **Conferência:** a CLI .NET reconhece a solution sem erro.
 
 ---
 
-### A3 — Criar os quatro projetos do backend
+### A3 — Criar os quatro projetos do backend ✅
 
 ```text
 Game.Domain
@@ -292,19 +317,28 @@ Game.Api
 
 ---
 
-### A4 — Configurar referências
+### A4 — Configurar referências ⬜ BLOCO ATUAL
 
 Aplicar somente as dependências aprovadas na seção 6.
 
 **Conferência:** build da solution passa; dependências proibidas não existem.
 
+**Limite deste bloco:** o compilador passa a impedir a dependência proibida *por ausência
+de referência*, mas não impede que alguém adicione a referência errada depois. Fechar esse
+buraco é papel do teste arquitetural, que pertence a A10.
+
 ---
 
-### A5 — Fixar o SDK .NET
+### A5 — Fixar o SDK .NET ✅ *(executado entre A2 e A3)*
 
-Criar `global.json` com uma versão válida do SDK .NET 8 escolhida no momento da execução.
+Criar `global.json` com uma versão válida do SDK .NET 10 escolhida no momento da execução.
 
 **Conferência:** uma máquina com o SDK compatível resolve a versão esperada ao executar `dotnet --version` dentro do repositório.
+
+> **Nota de ordem.** Este bloco foi deliberadamente executado antes de A3. Motivo: A3 é o
+> primeiro momento em que templates geram `.csproj` reais, e eles não devem ser criados
+> enquanto o repositório não controla qual SDK a CLI seleciona. A numeração foi mantida
+> para não invalidar referências cruzadas.
 
 ---
 
